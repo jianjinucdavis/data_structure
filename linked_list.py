@@ -1,3 +1,6 @@
+import warnings
+
+
 # node has data and next
 class Node:
     def __init__(self, data):
@@ -15,7 +18,7 @@ x push_back(key)         add to back
 x top_back()             return back item
 x pop_back()             remove back item
 x boolean find(key)      is key in list
-Erase(key)             remove key from list
+x Erase(key)             remove key from list
 boolean empty()        is list empty?
 add_before(node, key)  add key before node
 '''
@@ -29,6 +32,9 @@ class LinkedList:
         return self.head is None
 
     def push_front(self, node: Node) -> None:
+        if not isinstance(node, Node):
+            print(f"instantiating Node({node})")
+            node = Node(node)
         if self.empty():
             self.head = node
         else:
@@ -36,8 +42,8 @@ class LinkedList:
             self.head = node
             node.next = p
 
-    def top_front(self) -> Node:
-        return self.head
+    def top_front(self):
+        return self.head.data
 
     def pop_front(self):
         # move head to next next
@@ -47,6 +53,9 @@ class LinkedList:
                 self.head = p.next
             # delete
             del p
+            self.head = None
+        else:
+            warnings.warn("Empty List")
 
     def push_back(self, node: Node):
         if self.empty():
@@ -98,24 +107,33 @@ class LinkedList:
     def erase(self, key):
         if not self.empty():
             p = self.head
-            # if first one matches
+            # if erase first node
             if p.data == key:
                 if p.next:
                     self.head = p.next
                     del p
+                    return None
                 else:
                     del p
                     self.head = None
+                    return None
+            # if erase second or later node: find node,
             while p.next:
-                p = p.next
-                if p.data == key:
-                    if p.next:
-
-                        self.head = p.next
-                        del p
+                node1 = p
+                node2 = p.next
+                if node2.data == key:
+                    # if node 2 is not the last node
+                    # node1.next points to node2's next
+                    # delete node2
+                    if node2.next:
+                        node1.next = node2.next
+                        del node2
+                        return None
+                    # if node2 is the last node
                     else:
-                        del p
-
+                        del node2
+                        node1.next = None
+                        return None
 
     def print(self):
         if not self.empty():
@@ -128,7 +146,7 @@ class LinkedList:
         else:
             print("List is empty")
 
-
+'''
 ll = LinkedList()
 assert ll.empty(), True
 ll.print()
@@ -163,7 +181,14 @@ ll.print()
 print('find 3: ', ll.find(3))
 print('find 1000: ', ll.find(1000))
 
-'''
+ll.erase(3)
+ll.print()
+
+ll2 = LinkedList()
+assert ll.empty(), True
+ll.print()
+
+
 node1 = Node(1)
 node2 = Node(2)
 node3 = Node(3)
