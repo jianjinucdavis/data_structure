@@ -130,51 +130,52 @@ class LinkedList:
             print("List is empty")
 
 
-ll = LinkedList()
-assert ll.empty(), True
-ll.print()
+if __name__ == "__main__":
+    ll = LinkedList()
+    assert ll.empty(), True
+    ll.print()
 
-ll.push_front(Node(1))
-ll.print()
-print('empty', ll.empty())
+    ll.push_front(Node(1))
+    ll.print()
+    print('empty', ll.empty())
 
-ll.push_front(Node(3))
-ll.push_front(Node(5))
-ll.push_front(Node(8))
-print(ll.head.data)
-print(ll.head.next.data)
-print(ll.head.next.next.data)
-print(ll.head.next.next.next.data)
-ll.print()
+    ll.push_front(Node(3))
+    ll.push_front(Node(5))
+    ll.push_front(Node(8))
+    print(ll.head.data)
+    print(ll.head.next.data)
+    print(ll.head.next.next.data)
+    print(ll.head.next.next.next.data)
+    ll.print()
 
-ll.pop_front()
-ll.print()
+    ll.pop_front()
+    ll.print()
 
-ll.push_back(Node(10))
-ll.print()
+    ll.push_back(Node(10))
+    ll.print()
 
-t = ll.top_front()
-print(t.data)
-b = ll.return_back()
-print(b.data)
-print('====')
-ll.print()
-ll.pop_back()
-ll.print()
-print('find 3: ', ll.find(3))
-print('find 1000: ', ll.find(1000))
+    t = ll.top_front()
+    print(t.data)
+    b = ll.return_back()
+    print(b.data)
+    print('====')
+    ll.print()
+    ll.pop_back()
+    ll.print()
+    print('find 3: ', ll.find(3))
+    print('find 1000: ', ll.find(1000))
 
-'''
-node1 = Node(1)
-node2 = Node(2)
-node3 = Node(3)
-
-
-ll.head = node1
-node1.next = node2
-node2.next = node3
-node3.next = None
-ll.tail = node3
-print(ll.head.data)
-print(ll.head.next.next.data)
-'''
+    '''
+    node1 = Node(1)
+    node2 = Node(2)
+    node3 = Node(3)
+    
+    
+    ll.head = node1
+    node1.next = node2
+    node2.next = node3
+    node3.next = None
+    ll.tail = node3
+    print(ll.head.data)
+    print(ll.head.next.next.data)
+    '''
