@@ -19,10 +19,9 @@ x top_back()             return back item
 x pop_back()             remove back item
 x boolean find(key)      is key in list
 x Erase(key)             remove key from list
-boolean empty()        is list empty?
-add_before(node, key)  add key before node
+x boolean empty()        is list empty?
+x add_before(node, key)  add key before node
 '''
-
 
 class LinkedList:
     def __init__(self):
@@ -58,6 +57,9 @@ class LinkedList:
             warnings.warn("Empty List")
 
     def push_back(self, node: Node):
+        if not isinstance(node, Node):
+            print(f"instantiating Node({node})")
+            node = Node(node)
         if self.empty():
             self.push_front(node)
         else:
@@ -67,14 +69,14 @@ class LinkedList:
                 p = p.next
             p.next = node
 
-    def return_back(self) -> Node:
+    def return_back(self):
         if self.empty():
             return None
         else:
             p = self.head
             while p.next:
                 p = p.next
-            return p
+            return p.data
 
     def pop_back(self):
         if not self.empty():
@@ -135,6 +137,23 @@ class LinkedList:
                         node1.next = None
                         return None
 
+    def add_before(self, node, key):
+        # add node before key
+        if not isinstance(node, Node):
+            print(f"instantiating Node({node})")
+            node = Node(node)
+        node1 = self.head
+        if node1.data == key:
+            self.head = node
+            node.next = node1
+        else:
+            node2 = node1.next
+            while node2.data != key:
+                node1 = node1.next
+                node2 = node2.next
+            node1.next = node
+            node.next = node2
+
     def print(self):
         if not self.empty():
             p = self.head  # first node
@@ -145,60 +164,3 @@ class LinkedList:
             print('-->'.join([str(i) for i in nodes]))
         else:
             print("List is empty")
-
-'''
-ll = LinkedList()
-assert ll.empty(), True
-ll.print()
-
-ll.push_front(Node(1))
-ll.print()
-print('empty', ll.empty())
-
-ll.push_front(Node(3))
-ll.push_front(Node(5))
-ll.push_front(Node(8))
-print(ll.head.data)
-print(ll.head.next.data)
-print(ll.head.next.next.data)
-print(ll.head.next.next.next.data)
-ll.print()
-
-ll.pop_front()
-ll.print()
-
-ll.push_back(Node(10))
-ll.print()
-
-t = ll.top_front()
-print(t.data)
-b = ll.return_back()
-print(b.data)
-print('====')
-ll.print()
-ll.pop_back()
-ll.print()
-print('find 3: ', ll.find(3))
-print('find 1000: ', ll.find(1000))
-
-ll.erase(3)
-ll.print()
-
-ll2 = LinkedList()
-assert ll.empty(), True
-ll.print()
-
-
-node1 = Node(1)
-node2 = Node(2)
-node3 = Node(3)
-
-
-ll.head = node1
-node1.next = node2
-node2.next = node3
-node3.next = None
-ll.tail = node3
-print(ll.head.data)
-print(ll.head.next.next.data)
-'''
