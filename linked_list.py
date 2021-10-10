@@ -1,11 +1,10 @@
 import warnings
 
-
 ''' todo:
-- with tail
 - doubly linked list
+-- more efficient implementation
 - algorithm practice
--- learn python function overload
+-- implement pydantic
 '''
 
 
@@ -14,22 +13,6 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
-
-
-# a list of nodes
-# head
-'''API
-x push_front(key)        add to front
-x key top_front()        return front item
-x pop_front()            remove front item
-x push_back(key)         add to back
-x top_back()             return back item
-x pop_back()             remove back item
-x boolean find(key)      is key in list
-x Erase(key)             remove key from list
-x boolean empty()        is list empty?
-x add_before(node, key)  add key before node
-'''
 
 
 class LinkedList:
@@ -222,7 +205,7 @@ class LinkedListTail(LinkedList):
         if self.empty():
             return None
         else:
-            return self.tail
+            return self.tail.data
 
     def pop_back(self):
         if not self.empty():
@@ -288,3 +271,219 @@ class LinkedListTail(LinkedList):
                         self.tail = node1
                         node1.next = None
                         return None
+
+
+class DNode(Node):
+    def __init__(self, data):
+        super().__init__(data)
+        self.prev = None
+
+'''API
+push_front(key)        add to front
+key top_front()        return front item
+pop_front()            remove front item
+push_back(key)         add to back
+return_back()             return back item
+pop_back()             remove back item
+boolean find(key)      is key in list
+Erase(key)             remove key from list
+boolean empty()        is list empty?
+add_before(node, key)  add key before node
+'''
+class DoubleLinkedList(LinkedListTail):
+    def push_front(self, node: DNode) -> None:
+        if not isinstance(node, DNode):
+            node = DNode(node)
+        if self.empty():
+            self.head = node
+            self.tail = node
+        elif self.head == self.tail:
+            self.head = node
+            node.next = self.tail
+            self.tail.prev = node
+        else:
+            p = self.head
+            self.head = node
+            node.next = p
+            p.prev = node
+        return None
+
+    def validate(self):
+        if self.empty():
+            print('VALIDATION: list empty')
+            return None
+        if self.head == self.tail:
+            print('VALIDATION: list has 1 element')
+            return None
+        p = self.head
+        head_list = list()
+        head_list.append(p.data)
+        while p.next:
+            p = p.next
+            head_list.append(p.data)
+        t = self.tail
+        tail_list = list()
+        tail_list.append(t.data)
+        while t.prev:
+            t = t.prev
+            tail_list.append(t.data)
+
+        tail_list.reverse()
+        if head_list != tail_list:
+            raise Exception("List is not linked properly")
+        else:
+            print("VALIDATION PASSED")
+            return None
+
+    def print(self):
+        if self.empty():
+            print('EMPTY')
+        elif self.head == self.tail:
+            print('head-->', self.node.data, '-->tail')
+        else:
+            p = self.head
+            data = list()
+            data.append(p.data)
+            while p.next:
+                p = p.next
+                data.append(p.data)
+            print('HEAD seq')
+            print("-->".join([str(d) for d in data]))
+            t = self.tail
+            data = list()
+            data.append(t.data)
+            while t.prev:
+                t = t.prev
+                data.append(t.data)
+            print("TAIL seq")
+            data.reverse()
+            print("<--".join([str(d) for d in data]))
+
+    def pop_front(self):
+        if self.empty():
+            return None
+        elif self.head == self.tail:
+            p = self.head
+            self.head = None
+            self.tail = None
+            del p
+            return None
+        else:
+            p = self.head
+            self.head = p.next
+            p.next.prev = None
+            del p
+            return None
+
+    def pop_back(self):
+        if self.empty():
+            return None
+        if self.head == self.tail:
+            p = self.head
+            del p
+            self.head = None
+            self.tail = None
+            return None
+        t = self.tail
+        self.tail = t.prev
+        t.prev.next = None
+        del t
+        return None
+
+    def push_back(self, node: DNode):
+        if not isinstance(node, DNode):
+            node = DNode(node)
+        if self.empty():
+            self.head = node
+            self.tail = node
+        elif self.head == self.tail:
+            self.head = node
+            node.next = self.tail
+            self.tail.prev = node
+        else:
+            t = self.tail
+            self.tail = node
+            node.prev = t
+            t.next = node
+
+    def erase(self, key):
+        if self.empty():
+            return None
+        p = self.head
+        if p.data == key:
+            if p.next:
+                self.head = p.next
+                p.next.prev = None
+            else:
+                self.head = None
+                self.tail = None
+            del p
+            return None
+        while p.next:
+            p = p.next
+            if p.data == key:
+                p.prev.next = p.next
+                p.next.prev = p.prev
+                del p
+                return None
+
+    def add_before(self, node: DNode, key):
+        if not isinstance(node, DNode):
+            node = DNode(node)
+        if self.empty():
+            return None
+        else:
+            p = self.head
+            if p.data == node.data:
+                self.push_front(DNode(key))
+                return None
+            while p.next:
+                p = p.next
+                if p.data == node.data:
+                    pv = p.prev
+                    n = DNode(key)
+                    n.next = p
+                    n.prev = pv
+                    pv.next = n
+                    p.prev = n
+                    return None
+
+
+'''
+dl = DoubleLinkedList()
+for i in range(5):
+    dl.push_front(i)
+
+dl.validate()
+dl.print()
+print(dl.top_front())
+print('====')
+dl.pop_front()
+dl.print()
+dl.pop_back()
+dl.print()
+dl.push_back(1000)
+dl.validate()
+dl.print()
+print('===')
+print(dl.top_front())
+print(dl.return_back())
+dl.erase(2)
+dl.validate()
+dl.print()
+print('~~~~~')
+dl.erase(3)
+dl.validate()
+dl.print()
+dl.add_before(1, 0)
+dl.validate()
+dl.print()
+dl.add_before(1000, 999)
+dl.validate()
+dl.print()
+print('===')
+edl = DoubleLinkedList()
+edl.push_front(0)
+edl.pop_front()
+edl.print()
+'''
