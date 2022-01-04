@@ -49,12 +49,12 @@ def main():
     parents = list(map(int, input().split()))
     print(compute_height(n, parents))
 
-
+'''
 seq = [8, 8, 5, 6, 7, 3, 1, 6, -1, 5]
 n = len(seq)
 print(compute_height(n, seq))
 assert compute_height(n, seq) == 6
-
+'''
 
 seq = [-1, 0, 4, 0, 3]
 n = len(seq)
